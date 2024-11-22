@@ -41,7 +41,7 @@ export default function PizzaChart() {
       labels: Object.keys(totais),
       datasets: [
         {
-          label: "Fases da Venda",
+          label: "Total",
           data: Object.values(totais),
           backgroundColor: [
             "#1B59F8",
