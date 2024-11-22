@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
+html, body, #root {
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  background-color: #FAFBFD ;
 }
