@@ -39,10 +39,6 @@ export default function Vendas() {
     setVendedor(vendedoresFiltrados);
   };
 
-  useEffect(() => {
-    vender();
-    console.log(vendedor)
-  }, [data.salesData]);
 
   // Garantir que o estado 'vendedor' tenha dados antes de mapear
   if (vendedor.length === 0) return <p>Carregando...</p>;
@@ -86,11 +82,6 @@ export default function Vendas() {
       },
     },
   };
-
-
-  function conso() {
-    console.log(vendedor);
-  }
 
   return (
     <div className="bg-white shadow rounded-xl w-full h-full p-5">
