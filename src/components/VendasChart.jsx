@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +11,6 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import data from "../../data";  // Certifique-se de que o caminho está correto
 
 // Registrar os componentes necessários do Chart.js
 ChartJS.register(
@@ -26,22 +26,31 @@ export default function Vendas() {
   const [vendedor, setVendedor] = useState([]);  // Inicialize com um array vazio, não com null
 
   // Função para mapear os dados de vendas e armazenar no estado
-  const vender = () => {
-    const vendasData = data.salesData;
+  const vender = async ()  => {
+ 
+      try {
+        const response = await axios.get('http://191.193.196.163:8888/teste/json.jsp');
+       
+    
+        const vendasData = response.data.salesData;
 
-    // Criando um novo array para evitar a mutação do objeto
-    const vendedoresFiltrados = vendasData.map((item) => ({
-      vendedor: item.vendedor,
-      equipamentosVendidos: item.equipamentosVendidos
-    }));
-
-    // Atualizando o estado com os dados filtrados
-    setVendedor(vendedoresFiltrados);
+        // Criando um novo array para evitar a mutação do objeto
+        const vendedoresFiltrados = vendasData.map((item) => ({
+          vendedor: item.vendedor,
+          equipamentosVendidos: item.equipamentosVendidos
+        }));
+    
+        // Atualizando o estado com os dados filtrados
+        setVendedor(vendedoresFiltrados);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+   
   };
 
   useEffect(() => {
     vender();
-  }, [data.salesData]);
+  }, []);
 
   // Garantir que o estado 'vendedor' tenha dados antes de mapear
   if (vendedor.length === 0) return <p>Carregando...</p>;
@@ -85,11 +94,6 @@ export default function Vendas() {
       },
     },
   };
-
-
-  function conso() {
-    console.log(vendedor);
-  }
 
   return (
     <div className="bg-white shadow rounded-xl w-full h-full p-5">

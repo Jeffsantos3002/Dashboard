@@ -1,7 +1,8 @@
 import Box from "../components/Box";
 import PizzaChart from "../components/PizzaChart";
 import Vendas from "../components/VendasChart";
-import data from "../../data";
+import axios from 'axios';
+import { useEffect, useState } from 'react'
 
 import pv from '../assets/Total/pv.svg'
 import plus from '../assets/Total/plus.svg'
@@ -11,11 +12,13 @@ import view from '../assets/Total/view.svg'
 import proposalicon from '../assets/Total/proposal-icon.svg'
 
 export default function Home() {
-  const prop = data.totais.quantProp
-  const pev = data.totais.quantPv
-  const sim = data.totais.rateSdrSim
-  const propXpv = data.totais.ratePropPv
-  const sdrXsim = data.totais.rateSdrSim
+  const [dataTotal, setDataTotal] = useState([]);
+
+  const prop = dataTotal.quantProp
+  const pev = dataTotal.quantPv
+  const sim = dataTotal.rateSdrSim
+  const propXpv = dataTotal.ratePropPv
+  const sdrXsim = dataTotal.rateSdrSim
 
   const totais = [
     {
@@ -46,16 +49,54 @@ export default function Home() {
       svg: time
 
     }]
+
+
+
+  /// URL do endpoint
+  const endpoint = 'http://191.193.196.163:8888/teste/json.jsp';
+
+  // Estados iniciais definidos como arrays vazios
+  const [dataVende, setDataVende] = useState([]);
+  const [data, setData] = useState([]);
+
+
+  const [vendedor, setVendedor] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(endpoint);
+
+      // Atualiza os estados com os dados recebidos
+      setData(response);
+      setDataTotal(response.data.totais || []);
+      
+      const vendedoresFiltrados = (response.data.salesData || []).map((item) => ({
+        vendedor: item.vendedor,
+        equipamentosVendidos: item.equipamentosVendidos,
+      }));
+      setVendedor(vendedoresFiltrados);
+
+
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+
+  }, []);
+
   return (
     <main className="bg-bg flex flex-col items-center py-24 space-y-16 w-full px-5">
-      <h1 className="text-3xl font-semibold">Dashboard</h1>
 
       <div className="w-full max-w-[1200px] flex flex-wrap justify-center items-center space-y-14">
 
         <div className="flex flex-wrap justify-center items-center">
           {
             totais.map((total, index) => (
-              <Box key={index} total={total.total} title={total.title} icon={total.svg} />
+              <Box key={index} total={total.total} title={total.title} icon={total.svg} onclick={() => fetchData()} // Passando uma função anônima para chamar fetchData
+              />
             ))
           }
 
@@ -67,7 +108,7 @@ export default function Home() {
 
           </div>
           <div className="w-full lg:w-1/2 h-full">
-            <PizzaChart />
+            <PizzaChart/>
 
           </div>
 
