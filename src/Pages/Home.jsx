@@ -18,7 +18,7 @@ export default function Home() {
   const pev = dataTotal.quantPv
   const sim = dataTotal.rateSdrSim
   const propXpv = dataTotal.ratePropPv
-  const sdrXsim = dataTotal.rateSdrSim
+  const sdrXsim = dataTotal.rateSimProp
 
   const totais = [
     {
