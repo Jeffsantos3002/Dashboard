@@ -20,23 +20,17 @@ export default function PizzaChart() {
       const response = await axios.get('http://191.193.196.163:8888/teste/json.jsp');
      
   
-      // Extraindo e processando os dados
-      const totais = {
-        "Propostas Enviadas": 0,
-        "Propostas Visualizadas": 0,
-        "Conversões para SDR": 0,
-        "Conversões para SIM": 0,
-        "Conversões para Propostas": 0,
-        "Conversões para Venda": 0,
-      };
-  
+      const totais = {};
+
       response.data.salesData.forEach((vendedor) => {
-        totais["Propostas Enviadas"] += vendedor.fasesVenda.propostasEnviadas;
-        totais["Propostas Visualizadas"] += vendedor.fasesVenda.propostasVisualizadas;
-        totais["Conversões para SDR"] += vendedor.fasesVenda.conversoesParaSDR;
-        totais["Conversões para SIM"] += vendedor.fasesVenda.conversoesParaSIM;
-        totais["Conversões para Propostas"] += vendedor.fasesVenda.conversoesParaPropostas;
-        totais["Conversões para Venda"] += vendedor.fasesVenda.conversoesParaVenda;
+        Object.keys(vendedor.fasesVenda).forEach((chave) => {
+          // Se a chave ainda não estiver no objeto `totais`, inicializa com 0
+          if (!totais[chave]) {
+            totais[chave] = 0;
+          }
+          // Adiciona o valor correspondente à chave
+          totais[chave] += vendedor.fasesVenda[chave];
+        });
       });
   
       // Atualiza o estado com os dados formatados para o gráfico
@@ -44,7 +38,7 @@ export default function PizzaChart() {
         labels: Object.keys(totais),
         datasets: [
           {
-            label: "Fases da Venda",
+            label: "Total",
             data: Object.values(totais),
             backgroundColor: [
               "#1B59F8",
