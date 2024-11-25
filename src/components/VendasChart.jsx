@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import axios from "axios";
+import Utf8 from '../Utils/Utf8Covert'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,9 +42,10 @@ export default function Vendas() {
         }));
     
         // Atualizando o estado com os dados filtrados
+        
         setVendedor(vendedoresFiltrados);
       } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error('Erro ao buscar dados:', error, vendedor);
       }
    
   };

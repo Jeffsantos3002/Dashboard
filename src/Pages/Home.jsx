@@ -38,13 +38,13 @@ export default function Home() {
 
     },
     {
-      total: propXpv,
+      total: sdrXsim,
       title: 'Rate Sim x Prop',
       svg: proposalicon
 
     },
     {
-      total: sdrXsim,
+      total: propXpv,
       title: 'Rate Prop x PV',
       svg: time
 
